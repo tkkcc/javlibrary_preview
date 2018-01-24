@@ -1,5 +1,7 @@
 # jav_r18
 
+20180124 use low/med if no high quality
+
 add preview from r18.com to javlibrary.com
 
 support lastest chrome stable
