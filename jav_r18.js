@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         jav_r18
-// @version      0.0.3
+// @version      0.0.4
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  详情页添加r18.com预览
 // @supportURL   https://github.com/tkkcc/jav_r18/issues
 // @grant        GM_xmlhttpRequest
 // @grant        GM_download
-// @namespace    https://greasyfork.org/users/164996
+// @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 (function () {
     'use strict';
@@ -24,12 +24,11 @@
     const get_video_url = (avid, callback) => {
         GM_xmlhttpRequest({
             url: `http://www.r18.com/common/search/searchword=${avid}`,
+            method: 'GET',
             onload: res => {
                 try {
                     const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample');
-                    let video_url = video_tag.getAttribute('data-video-high');
-                    video_url = video_url ? video_url : video_tag.getAttribute('data-video-med');
-                    video_url = video_url ? video_url : video_tag.getAttribute('data-video-low');
+                    const video_url = video_tag.getAttribute('data-video-high') || video_tag.getAttribute('data-video-med') || video_tag.getAttribute('data-video-low');
                     callback(video_url);
                 } catch (err) { callback(''); }
             }
