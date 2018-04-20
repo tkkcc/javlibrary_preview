@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.5
+// @version      0.0.6
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  preview from r18.com and pron.tv
 // @grant        GM_xmlhttpRequest
@@ -75,8 +75,9 @@ const fetchList = async () => {
 	const d = Decrypt(), parser = new DOMParser()
 	const res = await gmFetch(baseUrl + '/stream/' + avid)
 	const doc = parseHTML(res.responseText)
-	const url = [...doc.querySelectorAll('div.title > a')].map(i => baseUrl + i.pathname).slice(0,6)
+	const url = [...doc.querySelectorAll('div.title > a')].map(i => baseUrl + i.pathname).slice(0,10)
 	const inf = [...doc.querySelectorAll('.hoster')].map(i => i.childNodes[2].nodeValue.trim())
+	const urlSet=new Set()
 	url.forEach(async (i, index) => {
 		try {
 			const res = await gmFetch(i)
@@ -84,6 +85,8 @@ const fetchList = async () => {
 			const html = d(res.responseText)
 			// get iframe src
 			const src = parser.parseFromString(html, "text/html").querySelector('iframe').getAttribute('src')
+			if (urlSet.has(src)) return
+			urlSet.add(src)
 			// add to list
 			requestAnimationFrame(() => {
 				$social.insertAdjacentHTML('beforebegin', `
