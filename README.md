@@ -1,14 +1,14 @@
 # javlibrary_preview
 
-[greasyfork](https://greasyfork.org/en/scripts/37122-jav-r18)
+[sleazyfork](https://sleazyfork.org/en/scripts/37122-javlibrary-preview)
 
-fetch preview from r18.com and pron.tv
+fetch preview from r18.com and ~~pron.tv~~ google
 
 support lastest chrome stable
 
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
 
-## hint
+<!-- ## hint
 
 ### openload is fast with correct proxy setting
 
@@ -25,9 +25,11 @@ support lastest chrome stable
     5. click on request to see request url
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195357.png)
     6. copy and paste in download tool
-    ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png)
+    ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
 
 ## change log
+
+20180603 prontv turns non-free, use google instead
 
 20180420 first ten links, remove duplicates
 
