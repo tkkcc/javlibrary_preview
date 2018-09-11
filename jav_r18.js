@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.9
+// @version      0.0.10
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  preview from r18.com
 // @grant        GM_xmlhttpRequest
@@ -33,7 +33,7 @@ const addToDoc = video_url => {
 }
 
 const r18 = async () => {
-	const res = await gmFetch(`http://www.r18.com/common/search/searchword=${avid}`)
+	const res = await gmFetch(`http://www.r18.com/common/search/order=match/searchword=${avid}`)
 	let video_url = ''
 	try {
 		const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
