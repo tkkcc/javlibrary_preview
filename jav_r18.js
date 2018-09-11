@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.7
+// @version      0.0.8
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  preview from r18.com
 // @grant        GM_xmlhttpRequest
@@ -23,7 +23,7 @@ const parseHTML = str => {
 	return tmp
 }
 
-const avid = document.title.split(' ')[0]
+const avid = document.title.split(' ')[0].split('-').join(' ')
 
 const addToDoc = video_url => {
 	const text = video_url

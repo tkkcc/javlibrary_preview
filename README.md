@@ -2,9 +2,9 @@
 
 [sleazyfork](https://sleazyfork.org/en/scripts/37122-javlibrary-preview)
 
-fetch preview from r18.com and ~~pron.tv~~ google
+fetch preview from r18.com and google
 
-support lastest chrome stable
+support latest chrome stable
 
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
 
@@ -28,6 +28,8 @@ support lastest chrome stable
     ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
 
 ## change log
+
+20180911 search word change, more preview from r18
 
 20180603 prontv turns non-free, use google instead
 
