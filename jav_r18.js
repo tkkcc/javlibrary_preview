@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.8
+// @version      0.0.9
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  preview from r18.com
 // @grant        GM_xmlhttpRequest
@@ -23,7 +23,7 @@ const parseHTML = str => {
 	return tmp
 }
 
-const avid = document.title.split(' ')[0].split('-').join(' ')
+const avid = document.title.replace(/([^-]+)-([^ ]+) .*/,'$1 $2')
 
 const addToDoc = video_url => {
 	const text = video_url
@@ -51,7 +51,6 @@ const fetchList = async () => {
 	const parser = new DOMParser()
 	const res = await gmFetch(baseUrl + avid)
 	const doc = parseHTML(res.responseText)
-	// console.log(doc)
 	const url = [...doc.querySelectorAll('.g .r a')].map(i => i.href)
 	url.forEach(src => {
 		requestAnimationFrame(() => {
