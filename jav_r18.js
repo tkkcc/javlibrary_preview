@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.10
+// @version      0.0.12
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  preview from r18.com
 // @grant        GM_xmlhttpRequest
@@ -10,7 +10,6 @@
 // r18.com
 // insert position, no need to wait
 const $position = document.querySelector('#video_favorite_edit')
-const $social = $position.nextElementSibling
 if (!$position) return
 // GM_xmlhttpRequest promise wrapper
 const gmFetch = url => new Promise((resolve, reject) => {
@@ -27,8 +26,8 @@ const avid = document.title.replace(/([^-]+)-([^ ]+) .*/,'$1 $2')
 
 const addToDoc = video_url => {
 	const text = video_url
-		? `<video id='jav_r18' style='postiton:absolute;z-order:1' src=${video_url} controls autoplay></video>`
-		: '<div class="header" style="text-align:center;padding-top:1rem;">preview not found</div>'
+		? `<video id=jav_r18 style='postiton:absolute;z-order:1' src=${video_url} controls autoplay></video>`
+		: '<div id=jav_r18 class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
 	$position.insertAdjacentHTML('afterend', text)
 }
 
@@ -54,7 +53,7 @@ const fetchList = async () => {
 	const url = [...doc.querySelectorAll('.g .r a')].map(i => i.href)
 	url.forEach(src => {
 		requestAnimationFrame(() => {
-			$social.insertAdjacentHTML('beforebegin', `
+			(document.getElementById('jav_r18')||$position).insertAdjacentHTML('afterend', `
 			<div style='display:flex'>
 			<a href='${src}' target='_blank' style='display:block;width:40em;text-overflow:ellipsis;overflow: hidden;white-space: nowrap'>${src}</a>
 			</div>`)

@@ -29,6 +29,8 @@ support latest chrome stable
 
 ## change log
 
+20180920 insert position change
+
 20180911 search url change, more preview from r18
 
 20180603 prontv turns non-free, use google instead
