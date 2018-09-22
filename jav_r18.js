@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.12
+// @version      0.0.13
 // @include      http*://*javlibrary.com/*/?v=*
-// @description  preview from r18.com
+// @description  perview video and links
 // @grant        GM_xmlhttpRequest
 // @grant        GM_download
 // @namespace    https://greasyfork.org/users/164996a
@@ -13,7 +13,7 @@ const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
 // GM_xmlhttpRequest promise wrapper
 const gmFetch = url => new Promise((resolve, reject) => {
-	GM_xmlhttpRequest({ url: url, method: 'GET', onload: resolve, onerror: reject })
+    GM_xmlhttpRequest({ url: url, method: 'GET', onload: resolve, onerror: reject })
 })
 
 const parseHTML = str => {
@@ -24,40 +24,65 @@ const parseHTML = str => {
 
 const avid = document.title.replace(/([^-]+)-([^ ]+) .*/,'$1 $2')
 
-const addToDoc = video_url => {
-	const text = video_url
-		? `<video id=jav_r18 style='postiton:absolute;z-order:1' src=${video_url} controls autoplay></video>`
-		: '<div id=jav_r18 class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
-	$position.insertAdjacentHTML('afterend', text)
+const preview = async () => {
+    const srcs= (src) => ['dmb','dm','sm'].map(i=> src.replace(/_(dmb|dm|sm)_/,`_${i}_`))
+        .map(i=>`<source src=${i}></source>`).join('')
+    // google + erovi, most accuracy, not contain latest
+    const google = async () => {    
+        // lucky search fail https://www.google.com/search?btnI=1&q=DAZD-086 site:https://erovi.jp
+        const res = await gmFetch(`https://www.google.com/search?num=1&q=allintitle:${avid} site:https://erovi.jp&safe=images&pws=0&lr=lang_ja`)
+        const dom = parseHTML(res.responseText)
+        if (dom.querySelector('#topstuff > div')) return
+        const url = dom.querySelector('.g .r a').href
+        const res2=await gmFetch(url)
+		const src = parseHTML(res2.responseText).querySelector('video').src
+        console.log('google',src)
+        return src
+    }
+    // erovi, contain latest, not support relevance order
+    const erovi = async () => {
+        const res = await gmFetch(`https://erovi.jp/list/dv_search-${avid}.html`)
+        const dom = parseHTML(res.responseText)
+        if (dom.querySelectorAll('a.listlnk').length!==1) return
+        const url = dom.querySelector('a.listlnk').getAttribute('href')
+        const res2=await gmFetch('https://erovi.jp'+url)
+        const src = parseHTML(res2.responseText).querySelector('video').src
+        console.log('erovi',src)
+        return src
+    }
+    let src
+    try {
+        src = srcs(await google()||await erovi())
+    } catch (_) { }
+    const html = src ? `<video id=jav_preview style='postiton:absolute;z-order:1' controls autoplay>${src}</video>`
+                    : '<div id=jav_preview class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
+    $position.insertAdjacentHTML('afterend', html)
 }
+preview()
 
-const r18 = async () => {
-	const res = await gmFetch(`http://www.r18.com/common/search/order=match/searchword=${avid}`)
-	let video_url = ''
-	try {
-		const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
-		video_url = ['high', 'med', 'low'].map(i => video_tag.getAttribute('data-video-' + i)).find(i => i)
-	} catch (err) { } finally {
-		addToDoc(video_url)
-	}
-}
-r18()
 // google
 const num=6
 const baseUrl = `https://www.google.com/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
 &as_eq=youtube.com+javlibrary.com+pron.tv&q=`
 const fetchList = async () => {
-	const parser = new DOMParser()
 	const res = await gmFetch(baseUrl + avid)
 	const doc = parseHTML(res.responseText)
 	const url = [...doc.querySelectorAll('.g .r a')].map(i => i.href)
 	url.forEach(src => {
 		requestAnimationFrame(() => {
-			(document.getElementById('jav_r18')||$position).insertAdjacentHTML('afterend', `
+			(document.getElementById('jav_preview')||$position).insertAdjacentHTML('afterend', `
 			<div style='display:flex'>
-			<a href='${src}' target='_blank' style='display:block;width:40em;text-overflow:ellipsis;overflow: hidden;white-space: nowrap'>${src}</a>
+			<a href='${src}' target='_blank' style='display:block;width:41em;text-overflow:ellipsis;overflow: hidden;white-space: nowrap'>${src}</a>
 			</div>`)
 		})
 	})
 }
-fetchList()
+
+$position.insertAdjacentHTML('afterend', `<button id=jav_perview_extra class=smallbutton style=\
+'padding:0.5em;display:block;margin-top:0.5em'>extra search from google</button>`)
+const b = document.querySelector('#jav_perview_extra')
+b.addEventListener('click', () => { 
+    b.style.display = 'none'
+    fetchList()
+})
+//fetchList()

@@ -2,9 +2,13 @@
 
 [sleazyfork](https://sleazyfork.org/en/scripts/37122-javlibrary-preview)
 
-fetch preview from r18.com and google
+support chrome 69
 
-support latest chrome stable
+since 0.13.0, extra list need one more click to avoid google robot test. If you don't want, toggle the last code block 
+
+
+
+
 
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
 
@@ -28,6 +32,8 @@ support latest chrome stable
     ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
 
 ## change log
+
+20180922 preview source change to erovi, much better 
 
 20180920 insert position change
 
