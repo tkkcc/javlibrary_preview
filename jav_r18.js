@@ -5,8 +5,6 @@
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
 // @grant        GM_download
-// @grant        GM_getValue
-// @grant        GM_setValue
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 // r18.com
@@ -14,7 +12,7 @@
 const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
 // change to avoid robot test .jp .sg 
-const google_domain = 'https://www.google.com.sg'
+const google_domain = 'https://www.google.com'
 // GM_xmlhttpRequest promise wrapper
 const gmFetch = url => new Promise((resolve, reject) => {
     GM_xmlhttpRequest({ url: url, method: 'GET', onload: resolve, onerror: reject })
