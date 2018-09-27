@@ -4,10 +4,9 @@
 
 support chrome 69
 
-since 0.13.0, extra list need one more click to avoid google robot test. If you don't want, toggle the last code block 
+[usefull tips](https://greasyfork.org/en/forum/discussion/43226)
 
-
-
+since 0.0.13, extra list need one more click to avoid google robot test. If you don't want, toggle the last code block 
 
 
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
@@ -32,6 +31,8 @@ since 0.13.0, extra list need one more click to avoid google robot test. If you 
     ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
 
 ## change log
+
+20180927 add r18 source, need manual code change
 
 20180922 preview source change to erovi, much better 
 

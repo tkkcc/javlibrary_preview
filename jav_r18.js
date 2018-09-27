@@ -1,16 +1,20 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.13
+// @version      0.0.14
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
 // @grant        GM_download
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 // r18.com
 // insert position, no need to wait
 const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
+// change to avoid robot test .jp .sg 
+const google_domain = 'https://www.google.com.sg'
 // GM_xmlhttpRequest promise wrapper
 const gmFetch = url => new Promise((resolve, reject) => {
     GM_xmlhttpRequest({ url: url, method: 'GET', onload: resolve, onerror: reject })
@@ -30,7 +34,7 @@ const preview = async () => {
     // google + erovi, most accuracy, not contain latest
     const google = async () => {    
         // lucky search fail https://www.google.com/search?btnI=1&q=DAZD-086 site:https://erovi.jp
-        const res = await gmFetch(`https://www.google.com/search?num=1&q=allintitle:${avid} site:https://erovi.jp&safe=images&pws=0&lr=lang_ja`)
+        const res = await gmFetch(`${google_domain}/search?num=1&q=allintitle:${avid} site:https://erovi.jp&safe=images&pws=0&lr=lang_ja`)
         const dom = parseHTML(res.responseText)
         if (dom.querySelector('#topstuff > div')) return
         const url = dom.querySelector('.g .r a').href
@@ -50,19 +54,28 @@ const preview = async () => {
         console.log('erovi',src)
         return src
     }
+    // r18.com
+    const r18 = async () => {
+        const res = await gmFetch(`http://www.r18.com/common/search/order=match/searchword=${avid}`)
+        const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
+        const src = ['high', 'med', 'low'].map(i => video_tag.getAttribute('data-video-' + i)).find(i => i)
+        console.log('r18',src)
+        return src
+    }
     let src
     try {
         src = srcs(await google()||await erovi())
+        // src = srcs(await r18())
     } catch (_) { }
     const html = src ? `<video id=jav_preview style='postiton:absolute;z-order:1' controls autoplay>${src}</video>`
-                    : '<div id=jav_preview class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
+        : '<div id=jav_preview class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
     $position.insertAdjacentHTML('afterend', html)
 }
 preview()
 
 // google
 const num=6
-const baseUrl = `https://www.google.com/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
+const baseUrl = `${google_domain}/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
 &as_eq=youtube.com+javlibrary.com+pron.tv&q=`
 const fetchList = async () => {
 	const res = await gmFetch(baseUrl + avid)
@@ -77,7 +90,7 @@ const fetchList = async () => {
 		})
 	})
 }
-
+// extra search button
 $position.insertAdjacentHTML('afterend', `<button id=jav_perview_extra class=smallbutton style=\
 'padding:0.5em;display:block;margin-top:0.5em'>extra search from google</button>`)
 const b = document.querySelector('#jav_perview_extra')
