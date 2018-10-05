@@ -4,11 +4,6 @@
 
 support chrome 69
 
-[usefull tips](https://greasyfork.org/en/forum/discussion/43226)
-
-since 0.0.13, extra list need one more click to avoid google robot test. If you don't want, toggle the last code block 
-
-
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
 
 <!-- ## hint
@@ -31,6 +26,8 @@ since 0.0.13, extra list need one more click to avoid google robot test. If you 
     ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
 
 ## change log
+
+20181006 change source order
 
 20180927 add r18 source, need manual code change
 
