@@ -4,7 +4,6 @@
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
-// @grant        GM_download
 // @connect      https://www.google.com
 // @connect      https://erovi.jp
 // @namespace    https://greasyfork.org/users/164996a

@@ -4,7 +4,7 @@
 
 support chrome 72
 
-![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
+![](https://raw.githubusercontent.com/tkkcc/javlibrary_preview/master/1.png)
 
 ## change log
 
