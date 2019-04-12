@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.15
+// @version      0.0.16
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
 // @grant        GM_download
+// @connect      https://www.google.com
+// @connect      https://erovi.jp
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 // r18.com
@@ -65,7 +67,7 @@ const preview = async () => {
   }
   let src
   try {
-    src = srcs(await erovi()||await google())
+    src = srcs((await erovi()) || (await google()))
   } catch (_) {}
   const html = src
     ? `<video id=jav_preview style='postiton:absolute;z-order:1' controls autoplay>${src}</video>`

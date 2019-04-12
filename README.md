@@ -2,30 +2,13 @@
 
 [sleazyfork](https://sleazyfork.org/en/scripts/37122-javlibrary-preview)
 
-support chrome 69
+support chrome 72
 
 ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416185657.png)
 
-<!-- ## hint
-
-### openload is fast with correct proxy setting
-
-### download from openload 
-  
-  - use [script](https://greasyfork.org/en/scripts/40855-openload-video-info)
-
-  - manually
-    1. `F12` to open devtool
-    2. switch to `Network`, click `Media`
-    3. click on video timeline
-    4. see the request    
-![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195235.png)
-    5. click on request to see request url
-![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195357.png)
-    6. copy and paste in download tool
-    ![](https://raw.githubusercontent.com/tkkcc/jav_r18/master/include/DeepinScreenshot_select-area_20180416195836.png) -->
-
 ## change log
+
+20190412 use @connect tag
 
 20181006 change source order
 
