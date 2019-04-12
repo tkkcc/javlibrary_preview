@@ -1,11 +1,9 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.16
+// @version      0.0.17
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
-// @connect      https://www.google.com
-// @connect      https://erovi.jp
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 // r18.com

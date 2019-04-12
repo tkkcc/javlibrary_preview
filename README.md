@@ -8,8 +8,6 @@ support chrome 72
 
 ## change log
 
-20190412 use @connect tag
-
 20181006 change source order
 
 20180927 add r18 source, need manual code change
