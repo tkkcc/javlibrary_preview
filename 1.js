@@ -9,6 +9,7 @@
 // insert position, no need to wait
 const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
+
 // change to avoid robot test .jp .sg
 const google_domain = 'https://www.google.com'
 // GM_xmlhttpRequest promise wrapper
@@ -26,16 +27,14 @@ const parseHTML = str => {
   tmp.body.innerHTML = str
   return tmp
 }
-
-const avid = document.title.replace(/([^-]+)-([^ ]+) .*/, '$1 $2')
-
+const avid = document.title.replace(/([^-]+)-([^ ]+) .*/, '$1-$2')
 const preview = async () => {
   const srcs = src =>
     ['dmb', 'dm', 'sm']
       .map(i => src.replace(/_(dmb|dm|sm)_/, `_${i}_`))
       .map(i => `<source src=${i}></source>`)
       .join('')
-  // r18.com
+
   const r18 = async () => {
     const res = await gmFetch(
       `https://www.r18.com/common/search/order=match/searchword=${avid}`
@@ -83,7 +82,6 @@ const preview = async () => {
   $position.insertAdjacentHTML('afterend', html)
 }
 preview()
-
 // google
 const num = 6
 const baseUrl = `${google_domain}/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
