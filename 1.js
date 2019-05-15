@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.17
+// @version      0.0.18
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
-// r18.com
 // insert position, no need to wait
 const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
@@ -22,7 +21,6 @@ const gmFetch = url =>
       onerror: reject
     })
   })
-
 const parseHTML = str => {
   const tmp = document.implementation.createHTMLDocument()
   tmp.body.innerHTML = str
@@ -37,6 +35,18 @@ const preview = async () => {
       .map(i => src.replace(/_(dmb|dm|sm)_/, `_${i}_`))
       .map(i => `<source src=${i}></source>`)
       .join('')
+  // r18.com
+  const r18 = async () => {
+    const res = await gmFetch(
+      `https://www.r18.com/common/search/order=match/searchword=${avid}`
+    )
+    const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
+    const src = ['high', 'med', 'low']
+      .map(i => video_tag.getAttribute('data-video-' + i))
+      .find(i => i)
+    console.log('r18', src)
+    return src
+  }
   // google + erovi, most accuracy, not contain latest
   const google = async () => {
     // lucky search fail https://www.google.com/search?btnI=1&q=DAZD-086 site:https://erovi.jp
@@ -64,7 +74,8 @@ const preview = async () => {
   }
   let src
   try {
-    src = srcs((await erovi()) || (await google()))
+    // src = srcs((await erovi()) || (await google()))
+    src = srcs(await r18())
   } catch (_) {}
   const html = src
     ? `<video id=jav_preview style='postiton:absolute;z-order:1' controls autoplay>${src}</video>`
