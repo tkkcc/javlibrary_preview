@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.18
+// @version      0.0.19
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
