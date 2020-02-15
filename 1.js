@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.19
+// @version      0.0.20
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
@@ -9,18 +9,18 @@
 // insert position, no need to wait
 const $position = document.querySelector('#video_favorite_edit')
 if (!$position) return
-
-// change to avoid robot test .jp .sg
-const google_domain = 'https://www.google.com'
+// Promise.race but for success
+const race = promises => {
+  const newPromises = promises.map(
+    p => new Promise((resolve, reject) => p.then(v => v && resolve(v), reject))
+  )
+  newPromises.push(Promise.all(promises).then(() => false))
+  return Promise.race(newPromises)
+}
 // GM_xmlhttpRequest promise wrapper
-const gmFetch = url =>
-  new Promise((resolve, reject) => {
-    GM_xmlhttpRequest({
-      url: url,
-      method: 'GET',
-      onload: resolve,
-      onerror: reject
-    })
+const gmFetch = (url, method = 'GET') =>
+  new Promise((onload, onerror) => {
+    GM_xmlhttpRequest({ url, method, onload, onerror })
   })
 const parseHTML = str => {
   const tmp = document.implementation.createHTMLDocument()
@@ -29,53 +29,40 @@ const parseHTML = str => {
 }
 const avid = document.title.replace(/([^-]+)-([^ ]+) .*/, '$1-$2')
 const preview = async () => {
-  const srcs = src =>
-    ['dmb', 'dm', 'sm']
-      .map(i => src.replace(/_(dmb|dm|sm)_/, `_${i}_`))
-      .map(i => `<source src=${i}></source>`)
-      .join('')
-
   const r18 = async () => {
-    const res = await gmFetch(
-      `https://www.r18.com/common/search/order=match/searchword=${avid}`
-    )
-    const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
-    const src = ['high', 'med', 'low']
-      .map(i => video_tag.getAttribute('data-video-' + i))
-      .find(i => i)
-    console.log('r18', src)
-    return src
+    try {
+      const res = await gmFetch(
+        `https://www.r18.com/common/search/order=match/searchword=${avid}`
+      )
+      const video_tag = parseHTML(res.responseText).querySelector('.js-view-sample')
+      const src = ['high', 'med', 'low']
+        .map(i => video_tag.getAttribute('data-video-' + i))
+        .find(i => i)
+      const srcs = ['dmb', 'dm', 'sm']
+        .map(i => src.replace(/_(dmb|dm|sm)_/, `_${i}_`))
+        .map(i => `<source src=${i}></source>`)
+        .join('')
+      return srcs
+    } catch (_) {}
   }
-  // google + erovi, most accuracy, not contain latest
-  const google = async () => {
-    // lucky search fail https://www.google.com/search?btnI=1&q=DAZD-086 site:https://erovi.jp
-    const res = await gmFetch(
-      `${google_domain}/search?num=1&q=allintitle:${avid} site:https://erovi.jp&safe=images&pws=0&lr=lang_ja`
-    )
-    const dom = parseHTML(res.responseText)
-    if (dom.querySelector('#topstuff > div')) return
-    const url = dom.querySelector('.g .r a').href
-    const res2 = await gmFetch(url)
-    const src = parseHTML(res2.responseText).querySelector('video').src
-    console.log('google', src)
-    return src
+  const prestige = async () => {
+    try {
+      const res = await gmFetch(
+        `https://www.prestige-av.com/goods/goods_list.php?q=${avid}&m=search&p=1&s=date`
+      )
+      const dom = parseHTML(res.responseText)
+      const url = dom.querySelectorAll('#body_goods > ul > li > a')
+      const name = [...url].map(i =>
+        new URL(i.getAttribute('href')).searchParams.get('sku').toUpperCase()
+      )
+      for (let n of name) {
+        n = 'https://www.prestige-av.com/sample_movie/' + n + '.mp4'
+        const res = await gmFetch(n, 'HEAD')
+        if (res.status === 200) return `<source src=${n}></source>`
+      }
+    } catch (_) {}
   }
-  // erovi, contain latest, not support relevance order
-  const erovi = async () => {
-    const res = await gmFetch(`https://erovi.jp/list/dv_search-${avid}.html`)
-    const dom = parseHTML(res.responseText)
-    if (dom.querySelectorAll('a.listlnk').length !== 1) return
-    const url = dom.querySelector('a.listlnk').getAttribute('href')
-    const res2 = await gmFetch('https://erovi.jp' + url)
-    const src = parseHTML(res2.responseText).querySelector('video').src
-    console.log('erovi', src)
-    return src
-  }
-  let src
-  try {
-    // src = srcs((await erovi()) || (await google()))
-    src = srcs(await r18())
-  } catch (_) {}
+  let src = await race([r18(), prestige()])
   const html = src
     ? `<video id=jav_preview style='postiton:absolute;z-order:1' controls autoplay>${src}</video>`
     : '<div id=jav_preview class=header style="text-align:center;padding-top:1rem;">preview not found</div>'
@@ -84,8 +71,8 @@ const preview = async () => {
 preview()
 // google
 const num = 6
-const baseUrl = `${google_domain}/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
-&as_eq=youtube.com+javlibrary.com+pron.tv&q=`
+const baseUrl = `https://google.com/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
+&as_eq=youtube.com+javlibrary.com+pron.tv+dailymotion.com+facebook.com+google.com&q=`
 const fetchList = async () => {
   const res = await gmFetch(baseUrl + avid)
   const doc = parseHTML(res.responseText)
@@ -112,4 +99,3 @@ b.addEventListener('click', () => {
   b.style.display = 'none'
   fetchList()
 })
-//fetchList()
