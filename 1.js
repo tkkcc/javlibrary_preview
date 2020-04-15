@@ -1,9 +1,12 @@
 // ==UserScript==
 // @name         javlibrary_preview
-// @version      0.0.20
+// @version      0.0.21
 // @include      http*://*javlibrary.com/*/?v=*
 // @description  perview video and links
 // @grant        GM_xmlhttpRequest
+// @connect      www.google.com
+// @connect      www.r18.com
+// @connect      www.prestige-av.com
 // @namespace    https://greasyfork.org/users/164996a
 // ==/UserScript==
 // insert position, no need to wait
@@ -71,7 +74,7 @@ const preview = async () => {
 preview()
 // google
 const num = 6
-const baseUrl = `https://google.com/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
+const baseUrl = `https://www.google.com/search?tbm=vid&num=${num}&safe=images&pws=0&lr=lang_en\
 &as_eq=youtube.com+javlibrary.com+pron.tv+dailymotion.com+facebook.com+google.com&q=`
 const fetchList = async () => {
   const res = await gmFetch(baseUrl + avid)
